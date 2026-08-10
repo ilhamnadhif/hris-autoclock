@@ -680,3 +680,12 @@ func fileExists(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil
 }
+
+func init() {
+	loc, err := time.LoadLocation("Asia/Jakarta")
+	if err != nil {
+		log.Printf("Gagal memuat timezone Asia/Jakarta: %v, pakai UTC+7", err)
+		loc = time.FixedZone("Asia/Jakarta", 7*3600)
+	}
+	time.Local = loc
+}
