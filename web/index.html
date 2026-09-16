@@ -15,11 +15,12 @@
   .card h2 { font-size: 15px; margin-bottom: 14px; color: #334155; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
   .grid { display: grid; gap: 12px; }
   .grid-2 { grid-template-columns: 1fr 1fr; }
-  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
   label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 4px; }
   input[type=text], input[type=password], input[type=time], input[type=number] { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; }
   input:focus { outline: 2px solid #3b82f6; border-color: transparent; }
   input[readonly] { background: #f1f5f9; color: #64748b; }
+  .hint { font-size: 11px; color: #94a3b8; margin-top: 4px; }
   .pass-wrap { position: relative; }
   .pass-wrap input { padding-right: 40px; }
   .eye { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 18px; padding: 4px; color: #64748b; }
@@ -37,24 +38,31 @@
   .badge.ok { background: #dcfce7; color: #16a34a; }
   .badge.err { background: #fee2e2; color: #dc2626; }
   .badge.warn { background: #fef9c3; color: #a16207; }
+  .badge.idle { background: #e2e8f0; color: #64748b; }
+  .today { border-top: 1px solid #e2e8f0; padding-top: 10px; }
+  .today-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 5px 0; font-size: 13px; }
+  .today-label { font-weight: 700; color: #334155; min-width: 78px; }
+  .today-time { color: #64748b; font-variant-numeric: tabular-nums; }
+  .today-msg { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: #94a3b8; word-break: break-all; }
   .day-card { border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; background: #f8fafc; }
   .day-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .day-head h3 { font-size: 15px; color: #334155; }
   .day-body { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   .slot-box { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; }
   .slot-box h4 { font-size: 13px; color: #475569; margin-bottom: 10px; }
-  .img-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
   .slot-media { display: grid; grid-template-columns: 220px 1fr; gap: 14px; margin-top: 12px; }
   .media-photo { display: flex; flex-direction: column; gap: 8px; }
   .media-map { min-width: 0; }
-  .img-prev { position: relative; width: 100%; height: 160px; flex-shrink: 0; }
-  .img-row .img-prev img, .media-photo .img-prev img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0; display: none; }
-  .img-row .img-prev .del-img { display: none; position: absolute; top: 2px; right: 2px; background: #dc2626; color: #fff; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; line-height: 18px; cursor: pointer; text-align: center; }
-  .img-row .upload-label { font-size: 12px; color: #2563eb; cursor: pointer; font-weight: 600; }
-  .img-row input[type=file] { display: none; }
-  .map-box { height: 200px; border-radius: 8px; border: 1px solid #e2e8f0; z-index: 0; cursor: crosshair; }
+  .img-prev { position: relative; width: 100%; height: 160px; display: none; }
+  .media-photo .img-prev img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0; display: block; }
+  .media-photo .del-img { position: absolute; top: 4px; right: 4px; background: #dc2626; color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 13px; line-height: 22px; cursor: pointer; text-align: center; padding: 0; }
+  .media-photo .upload-label { font-size: 12px; color: #2563eb; cursor: pointer; font-weight: 600; margin: 0; }
+  .media-photo .upload-label:hover { text-decoration: underline; }
+  .media-photo input[type=file] { display: none; }
+  .map-box { height: 200px; border-radius: 8px; border: 1px solid #e2e8f0; z-index: 0; cursor: crosshair; background: #e2e8f0; }
   .map-hint { font-size: 11px; color: #94a3b8; margin-top: 4px; }
   .no-photo { font-size: 11px; color: #94a3b8; }
+  .no-photo.bad { color: #dc2626; font-weight: 600; }
   .switch { position: relative; width: 42px; height: 24px; }
   .switch input { opacity: 0; width: 0; height: 0; }
   .slider { position: absolute; cursor: pointer; inset: 0; background: #cbd5e1; border-radius: 999px; transition: .2s; }
@@ -69,9 +77,9 @@
   .log-row.err .a { color: #dc2626; }
   .log-row .m { color: #475569; word-break: break-all; }
   #logbox { max-height: 320px; overflow-y: auto; }
-  .toast { position: fixed; bottom: 20px; right: 20px; background: #1e293b; color: #fff; padding: 12px 18px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 99; }
+  .toast { position: fixed; bottom: 20px; right: 20px; background: #1e293b; color: #fff; padding: 12px 18px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 99; max-width: 70vw; }
   .toast.show { opacity: 1; }
-  @media (max-width: 900px) { .day-body, .grid-2, .grid-4, .slot-media { grid-template-columns: 1fr; } body { padding: 12px; } }
+  @media (max-width: 900px) { .day-body, .grid-2, .grid-3, .slot-media { grid-template-columns: 1fr; } body { padding: 12px; } }
 </style>
 </head>
 <body>
@@ -79,34 +87,41 @@
 <h1>HRIS Auto Clock</h1>
 <div class="sub">Auto clock-in / clock-out per hari (Senin&ndash;Jumat) untuk HRIS Lumoshive</div>
 
-<div id="statuscard" class="card">
+<div class="card">
   <h2>Status</h2>
   <div id="statusline" class="status-line">Memuat...</div>
+  <div id="todaybox" class="today"></div>
 </div>
 
 <div class="card">
   <h2>Pengaturan Umum</h2>
-  <div class="grid grid-2">
+  <div class="grid grid-3">
     <div>
-      <label>Email</label>
+      <label for="email">Email</label>
       <input type="text" id="email" placeholder="user@lumoshive.com" autocomplete="off">
     </div>
     <div>
-      <label>Password</label>
+      <label for="password">Password</label>
       <div class="pass-wrap">
-        <input type="password" id="password" placeholder="password" autocomplete="off">
-        <button type="button" class="eye" onclick="togglePassword()" title="Lihat / sembunyikan">👁</button>
+        <input type="password" id="password" placeholder="password" autocomplete="new-password">
+        <button type="button" class="eye" onclick="togglePassword()" title="Lihat / sembunyikan">&#128065;</button>
       </div>
+      <div class="hint" id="pwhint"></div>
+    </div>
+    <div>
+      <label for="catchup">Toleransi absen telat (menit)</label>
+      <input type="number" id="catchup" min="1" max="1440" step="5" value="240">
+      <div class="hint">Kalau app baru nyala setelah jam absen, absen tetap dikirim selama belum lewat batas ini.</div>
     </div>
   </div>
   <div class="actions">
-    <button class="btn btn-primary" onclick="saveConfig(true)">Simpan</button>
+    <button class="btn btn-primary" id="btn-save" onclick="saveGeneral()">Simpan &amp; Uji Login</button>
   </div>
 </div>
 
 <div class="card">
   <h2>Pengaturan Per Hari</h2>
-  <div class="status-line">Setiap hari punya jam, lokasi, dan foto clock-in / clock-out sendiri. Status terkunci WFH. Sabtu &amp; Minggu libur (tidak ditampilkan).</div>
+  <div class="status-line">Jam, lokasi, dan foto diatur per hari dan tersimpan otomatis. Status terkunci WFH. Foto <b>wajib</b> ada di tiap slot &mdash; HRIS menolak absen tanpa foto. Sabtu &amp; Minggu libur (tidak ditampilkan).</div>
   <div id="dayCards"></div>
 </div>
 
@@ -120,39 +135,79 @@
 <script>
 const DAY_NAMES = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
 
+// Titik acuan kantor. Radius absen dihitung otomatis dari jarak titik yang
+// dipilih ke koordinat ini, jadi mengubahnya mengubah semua radius.
+const OFFICE = { lat: -6.1648863, lng: 106.7634657 };
+const DEFAULT_LAT = "-6.1648863";
+const DEFAULT_LNG = "106.7634657";
+
+const maps = {};
+let passwordSaved = false;
+let mapsAvailable = typeof L !== 'undefined';
+
+/* ------------------------------------------------------------------ utils */
+
 function toast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 3000);
 }
+
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// api membungkus fetch supaya semua kegagalan (HTTP error, server mati,
+// respons bukan JSON) muncul sebagai Error dengan pesan yang bisa dibaca.
+async function api(url, opts) {
+  const r = await fetch(url, opts);
+  let data = null;
+  try { data = await r.json(); } catch (e) { /* respons bukan JSON */ }
+  if (!r.ok) throw new Error((data && data.error) || ('HTTP ' + r.status));
+  return data || {};
+}
+
+function cardOf(day) {
+  return document.querySelector(`.day-card[data-day="${day}"]`);
+}
+
+function prefix(slot) { return slot === 'in' ? 'ci' : 'co'; }
+
+function slotLabel(slot) { return slot === 'in' ? 'clock in' : 'clock out'; }
 
 function togglePassword() {
   const p = document.getElementById('password');
   const b = document.querySelector('.eye');
-  if (p.type === 'password') { p.type = 'text'; b.textContent = '🙈'; }
-  else { p.type = 'password'; b.textContent = '👁'; }
+  const hidden = p.type === 'password';
+  p.type = hidden ? 'text' : 'password';
+  b.textContent = hidden ? '\u{1F648}' : '\u{1F441}';
 }
 
-function esc(s) {
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function haversine(lat1, lng1, lat2, lng2) {
+  const R = 6371000;
+  const toRad = d => d * Math.PI / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a = Math.sin(dLat / 2) ** 2 +
+            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(a));
 }
 
-async function loadConfig() {
-  const r = await fetch('/api/config');
-  const c = await r.json();
-  document.getElementById('email').value = c.email || '';
-  document.getElementById('password').value = c.password || '';
-  document.getElementById('email').addEventListener('input', scheduleSave);
-  document.getElementById('password').addEventListener('input', scheduleSave);
-  buildDayCards(c.days || {});
+function distanceToOffice(latStr, lngStr) {
+  const lat = parseFloat(latStr);
+  const lng = parseFloat(lngStr);
+  if (!isFinite(lat) || !isFinite(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) return null;
+  return haversine(lat, lng, OFFICE.lat, OFFICE.lng);
 }
+
+/* ------------------------------------------------------------- day cards */
 
 function buildDayCards(days) {
   const box = document.getElementById('dayCards');
   box.innerHTML = '';
-  const order = [1, 2, 3, 4, 5];
-  for (const d of order) {
+  for (const d of [1, 2, 3, 4, 5]) {
     const day = days[String(d)] || { enabled: false, clock_in: {}, clock_out: {} };
     const ci = day.clock_in || {};
     const co = day.clock_out || {};
@@ -168,110 +223,90 @@ function buildDayCards(days) {
         </label>
       </div>
       <div class="day-body">
-        <div class="slot-box">
-          <h4>Clock In</h4>
-          <div class="grid grid-2">
-            <div><label>Jam</label><input type="time" data-role="ci_time" value="${ci.time || '09:00'}"></div>
-            <div><label>Latitude</label><input type="text" data-role="ci_lat" value="${esc(ci.latitude || '-6.1648863')}"></div>
-            <div><label>Longitude</label><input type="text" data-role="ci_lng" value="${esc(ci.longitude || '106.7634657')}"></div>
-            <div><label>Radius (m) <span style="font-weight:400;color:#94a3b8">(otomatis)</span></label>
-              <input type="number" data-role="ci_radius" value="${ci.radius || 150}" readonly>
-              <div class="no-photo" data-role="ci_dist"></div>
-            </div>
-          </div>
-          <div class="slot-media">
-            <div class="media-photo">
-              <div class="img-prev">
-                <img data-role="ci_img" src="" alt="clock in photo">
-                <button class="del-img" data-role="ci_del" onclick="deleteImage(${d}, 'in')">×</button>
-              </div>
-              <label class="upload-label">
-                <span data-role="ci_upload_label">Unggah Foto Clock In</span>
-                <input type="file" accept="image/*" data-role="ci_file" onchange="uploadImage(${d}, 'in', this)">
-              </label>
-              <div class="no-photo" data-role="ci_nophoto"></div>
-            </div>
-            <div class="media-map">
-              <div style="display:flex;gap:8px;margin-bottom:6px;">
-                <button class="btn btn-sm btn-primary" onclick="useMyLocation(${d}, 'in')">📍 Lokasi Saat Ini</button>
-              </div>
-              <div class="map-box" data-role="ci_map"></div>
-              <div class="map-hint">Klik pada map untuk set lokasi clock in</div>
-            </div>
-          </div>
-        </div>
-        <div class="slot-box">
-          <h4>Clock Out</h4>
-          <div class="grid grid-2">
-            <div><label>Jam</label><input type="time" data-role="co_time" value="${co.time || '18:00'}"></div>
-            <div><label>Latitude</label><input type="text" data-role="co_lat" value="${esc(co.latitude || '-6.1648863')}"></div>
-            <div><label>Longitude</label><input type="text" data-role="co_lng" value="${esc(co.longitude || '106.7634657')}"></div>
-            <div><label>Radius (m) <span style="font-weight:400;color:#94a3b8">(otomatis)</span></label>
-              <input type="number" data-role="co_radius" value="${co.radius || 150}" readonly>
-              <div class="no-photo" data-role="co_dist"></div>
-            </div>
-          </div>
-          <div class="slot-media">
-            <div class="media-photo">
-              <div class="img-prev">
-                <img data-role="co_img" src="" alt="clock out photo">
-                <button class="del-img" data-role="co_del" onclick="deleteImage(${d}, 'out')">×</button>
-              </div>
-              <label class="upload-label">
-                <span data-role="co_upload_label">Unggah Foto Clock Out</span>
-                <input type="file" accept="image/*" data-role="co_file" onchange="uploadImage(${d}, 'out', this)">
-              </label>
-              <div class="no-photo" data-role="co_nophoto"></div>
-            </div>
-            <div class="media-map">
-              <div style="display:flex;gap:8px;margin-bottom:6px;">
-                <button class="btn btn-sm btn-primary" onclick="useMyLocation(${d}, 'out')">📍 Lokasi Saat Ini</button>
-              </div>
-              <div class="map-box" data-role="co_map"></div>
-              <div class="map-hint">Klik pada map untuk set lokasi clock out</div>
-            </div>
-          </div>
-        </div>
+        ${slotHtml(d, 'in', ci, '09:00')}
+        ${slotHtml(d, 'out', co, '18:00')}
       </div>`;
     box.appendChild(card);
   }
+  bindCards();
   initMaps();
   loadImages();
 }
 
-const maps = {};
-
-const OFFICE = { lat: -6.1648863, lng: 106.7634657 };
-
-function haversine(lat1, lng1, lat2, lng2) {
-  const R = 6371000;
-  const toRad = d => d * Math.PI / 180;
-  const dLat = toRad(lat2 - lat1);
-  const dLng = toRad(lng2 - lng1);
-  const a = Math.sin(dLat / 2) ** 2 +
-            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
-  return 2 * R * Math.asin(Math.sqrt(a));
+function slotHtml(d, slot, cc, defaultTime) {
+  const p = prefix(slot);
+  const title = slot === 'in' ? 'Clock In' : 'Clock Out';
+  return `
+    <div class="slot-box">
+      <h4>${title}</h4>
+      <div class="grid grid-2">
+        <div><label>Jam</label><input type="time" data-role="${p}_time" value="${esc(cc.time || defaultTime)}" required></div>
+        <div><label>Latitude</label><input type="text" data-role="${p}_lat" value="${esc(cc.latitude || DEFAULT_LAT)}" inputmode="decimal"></div>
+        <div><label>Longitude</label><input type="text" data-role="${p}_lng" value="${esc(cc.longitude || DEFAULT_LNG)}" inputmode="decimal"></div>
+        <div>
+          <label>Radius (m) <span style="font-weight:400;color:#94a3b8">(otomatis)</span></label>
+          <input type="number" data-role="${p}_radius" value="${Number(cc.radius) > 0 ? Number(cc.radius) : 150}" readonly>
+          <div class="no-photo" data-role="${p}_dist"></div>
+        </div>
+      </div>
+      <div class="slot-media">
+        <div class="media-photo">
+          <div class="img-prev" data-role="${p}_prev">
+            <img data-role="${p}_img" src="" alt="Foto ${title} ${DAY_NAMES[d]}">
+            <button type="button" class="del-img" onclick="deleteImage(${d}, '${slot}')" title="Hapus foto">&times;</button>
+          </div>
+          <label class="upload-label">
+            <span data-role="${p}_upload_label">Unggah Foto ${title}</span>
+            <input type="file" accept="image/*" data-role="${p}_file" onchange="uploadImage(${d}, '${slot}', this)">
+          </label>
+          <div class="no-photo" data-role="${p}_nophoto"></div>
+        </div>
+        <div class="media-map">
+          <div style="display:flex;gap:8px;margin-bottom:6px;">
+            <button type="button" class="btn btn-sm btn-primary" onclick="useMyLocation(${d}, '${slot}')">&#128205; Lokasi Saat Ini</button>
+          </div>
+          <div class="map-box" data-role="${p}_map"></div>
+          <div class="map-hint" data-role="${p}_maphint">Klik pada map untuk set lokasi ${slotLabel(slot)}</div>
+        </div>
+      </div>
+    </div>`;
 }
 
-function calcDist(key, latStr, lngStr) {
-  const lat = parseFloat(latStr);
-  const lng = parseFloat(lngStr);
-  if (isNaN(lat) || isNaN(lng)) return null;
-  return haversine(lat, lng, OFFICE.lat, OFFICE.lng);
+function bindCards() {
+  document.querySelectorAll('.day-card').forEach(card => {
+    const d = parseInt(card.dataset.day, 10);
+    for (const slot of ['in', 'out']) {
+      const p = prefix(slot);
+      const latEl = card.querySelector(`[data-role=${p}_lat]`);
+      const lngEl = card.querySelector(`[data-role=${p}_lng]`);
+      const onCoord = () => { syncMap(d, slot); refreshSlot(d, slot); scheduleSave(); };
+      latEl.addEventListener('input', onCoord);
+      lngEl.addEventListener('input', onCoord);
+      card.querySelector(`[data-role=${p}_time]`).addEventListener('input', scheduleSave);
+      refreshSlot(d, slot);
+    }
+    card.querySelector('[data-role=enabled]').addEventListener('change', scheduleSave);
+  });
 }
 
-function updateRadius(day, slot) {
-  const card = document.querySelector(`.day-card[data-day="${day}"]`);
+// refreshSlot memperbarui jarak ke kantor + radius otomatis. Kalau koordinat
+// belum valid, radius lama dibiarkan supaya nilai yang sudah benar tidak hilang.
+function refreshSlot(day, slot) {
+  const card = cardOf(day);
   if (!card) return;
-  const p = slot === 'in' ? 'ci' : 'co';
+  const p = prefix(slot);
   const lat = card.querySelector(`[data-role=${p}_lat]`).value;
   const lng = card.querySelector(`[data-role=${p}_lng]`).value;
-  const dist = calcDist(null, lat, lng);
+  const distEl = card.querySelector(`[data-role=${p}_dist]`);
   const radiusEl = card.querySelector(`[data-role=${p}_radius]`);
+  const dist = distanceToOffice(lat, lng);
   if (dist === null) {
-    radiusEl.value = 150;
+    distEl.textContent = 'Koordinat belum valid, absen akan dilewati';
+    distEl.classList.add('bad');
     return;
   }
+  distEl.classList.remove('bad');
+  distEl.textContent = `Jarak ke kantor: ${Math.round(dist)} m`;
   radiusEl.value = Math.max(150, Math.ceil(dist) + 150);
 }
 
@@ -281,187 +316,211 @@ function useMyLocation(day, slot) {
     return;
   }
   navigator.geolocation.getCurrentPosition(pos => {
-    const card = document.querySelector(`.day-card[data-day="${day}"]`);
-    const p = slot === 'in' ? 'ci' : 'co';
-    const latEl = card.querySelector(`[data-role=${p}_lat]`);
-    const lngEl = card.querySelector(`[data-role=${p}_lng]`);
-    latEl.value = pos.coords.latitude.toFixed(7);
-    lngEl.value = pos.coords.longitude.toFixed(7);
-    updateMap(day + ':' + slot, latEl.value, lngEl.value);
-    updateDist(day, slot);
-    updateRadius(day, slot);
+    const card = cardOf(day);
+    if (!card) return;
+    const p = prefix(slot);
+    card.querySelector(`[data-role=${p}_lat]`).value = pos.coords.latitude.toFixed(7);
+    card.querySelector(`[data-role=${p}_lng]`).value = pos.coords.longitude.toFixed(7);
+    syncMap(day, slot);
+    refreshSlot(day, slot);
     scheduleSave();
-    toast(`${DAY_NAMES[day]} (${slot === 'in' ? 'clock in' : 'clock out'}): lokasi diperbarui`);
+    toast(`${DAY_NAMES[day]} (${slotLabel(slot)}): lokasi diperbarui`);
   }, err => {
     toast('Gagal ambil lokasi: ' + err.message);
   }, { enableHighAccuracy: true, timeout: 10000 });
 }
 
-function updateDist(day, slot) {
-  const card = document.querySelector(`.day-card[data-day="${day}"]`);
-  if (!card) return;
-  const p = slot === 'in' ? 'ci' : 'co';
-  const lat = card.querySelector(`[data-role=${p}_lat]`).value;
-  const lng = card.querySelector(`[data-role=${p}_lng]`).value;
-  const dist = calcDist(null, lat, lng);
-  const el = card.querySelector(`[data-role=${p}_dist]`);
-  if (dist === null) {
-    el.textContent = '';
-  } else {
-    el.textContent = `Jarak ke kantor: ${Math.round(dist)}m`;
-  }
-}
+/* ------------------------------------------------------------------- map */
 
 function initMaps() {
-  Object.keys(maps).forEach(k => { maps[k].remove(); delete maps[k]; });
+  Object.keys(maps).forEach(k => { maps[k].m.remove(); delete maps[k]; });
+  if (!mapsAvailable) {
+    document.querySelectorAll('[data-role$=_maphint]').forEach(el => {
+      el.textContent = 'Map tidak dapat dimuat (offline). Isi latitude / longitude manual.';
+    });
+    return;
+  }
   document.querySelectorAll('.day-card').forEach(card => {
-    const d = card.dataset.day;
+    const d = parseInt(card.dataset.day, 10);
     for (const slot of ['in', 'out']) {
-      const key = d + ':' + slot;
-      const latEl = card.querySelector(`[data-role=${slot === 'in' ? 'ci' : 'co'}_lat]`);
-      const lngEl = card.querySelector(`[data-role=${slot === 'in' ? 'ci' : 'co'}_lng]`);
-      const mapEl = card.querySelector(`[data-role=${slot === 'in' ? 'ci' : 'co'}_map]`);
-      const mk = { el: null };
-      const m = L.map(mapEl, { zoomControl: false, attributionControl: false }).setView([0, 0], 13);
+      const p = prefix(slot);
+      const latEl = card.querySelector(`[data-role=${p}_lat]`);
+      const lngEl = card.querySelector(`[data-role=${p}_lng]`);
+      const mapEl = card.querySelector(`[data-role=${p}_map]`);
+      const m = L.map(mapEl, { zoomControl: false, attributionControl: false }).setView([OFFICE.lat, OFFICE.lng], 14);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(m);
-      mk.el = L.marker([0, 0]).addTo(m);
-      maps[key] = { m, mk };
-      updateMap(key, latEl.value, lngEl.value);
-      updateDist(d, slot);
-      updateRadius(d, slot);
-      bindAutoSave(d, slot);
-      latEl.addEventListener('input', () => { updateMap(key, latEl.value, lngEl.value); updateDist(d, slot); updateRadius(d, slot); scheduleSave(); });
-      lngEl.addEventListener('input', () => { updateMap(key, latEl.value, lngEl.value); updateDist(d, slot); updateRadius(d, slot); scheduleSave(); });
+      maps[d + ':' + slot] = { m, mk: L.marker([OFFICE.lat, OFFICE.lng]).addTo(m) };
       m.on('click', e => {
         latEl.value = e.latlng.lat.toFixed(7);
         lngEl.value = e.latlng.lng.toFixed(7);
-        updateMap(key, latEl.value, lngEl.value);
-        updateDist(d, slot);
-        updateRadius(d, slot);
+        syncMap(d, slot);
+        refreshSlot(d, slot);
         scheduleSave();
       });
+      syncMap(d, slot);
     }
   });
 }
 
-function updateMap(key, latStr, lngStr) {
-  const lat = parseFloat(latStr);
-  const lng = parseFloat(lngStr);
-  if (!maps[key] || isNaN(lat) || isNaN(lng)) return;
-  const { m, mk } = maps[key];
-  mk.el.setLatLng([lat, lng]);
-  m.setView([lat, lng], 14);
+function syncMap(day, slot) {
+  const entry = maps[day + ':' + slot];
+  const card = cardOf(day);
+  if (!entry || !card) return;
+  const p = prefix(slot);
+  const lat = parseFloat(card.querySelector(`[data-role=${p}_lat]`).value);
+  const lng = parseFloat(card.querySelector(`[data-role=${p}_lng]`).value);
+  if (!isFinite(lat) || !isFinite(lng)) return;
+  entry.mk.setLatLng([lat, lng]);
+  entry.m.setView([lat, lng], entry.m.getZoom() || 14);
 }
+
+/* ------------------------------------------------------------- simpan */
 
 function collectDays() {
   const days = {};
+  let invalid = '';
   document.querySelectorAll('.day-card').forEach(card => {
     const d = card.dataset.day;
-    const q = sel => card.querySelector(sel);
+    const q = role => card.querySelector(`[data-role=${role}]`);
+    const ciTime = q('ci_time').value;
+    const coTime = q('co_time').value;
+    if (!ciTime || !coTime) { invalid = invalid || DAY_NAMES[parseInt(d, 10)]; return; }
     days[d] = {
-      enabled: q('[data-role=enabled]').checked,
+      enabled: q('enabled').checked,
       clock_in: {
-        time: q('[data-role=ci_time]').value,
-        latitude: q('[data-role=ci_lat]').value.trim(),
-        longitude: q('[data-role=ci_lng]').value.trim(),
-        radius: parseFloat(q('[data-role=ci_radius]').value) || 0,
+        time: ciTime,
+        latitude: q('ci_lat').value.trim(),
+        longitude: q('ci_lng').value.trim(),
+        radius: parseFloat(q('ci_radius').value) || 150,
         status: 'WFH',
       },
       clock_out: {
-        time: q('[data-role=co_time]').value,
-        latitude: q('[data-role=co_lat]').value.trim(),
-        longitude: q('[data-role=co_lng]').value.trim(),
-        radius: parseFloat(q('[data-role=co_radius]').value) || 0,
+        time: coTime,
+        latitude: q('co_lat').value.trim(),
+        longitude: q('co_lng').value.trim(),
+        radius: parseFloat(q('co_radius').value) || 150,
         status: 'WFH',
       },
     };
   });
-  return days;
-}
-
-async function saveConfig(verify) {
-  const cfg = {
-    email: document.getElementById('email').value.trim(),
-    password: document.getElementById('password').value,
-    days: collectDays(),
-  };
-  const r = await fetch('/api/config', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(cfg),
-  });
-  const res = await r.json();
-  toast(res.status === 'ok' ? 'Pengaturan disimpan' : 'Gagal: ' + JSON.stringify(res));
-  if (verify && cfg.email && cfg.password) {
-    await testLogin();
-  } else {
-    loadStatus();
+  if (invalid) {
+    toast(`Jam ${invalid} belum lengkap, perubahan belum disimpan`);
+    return null;
   }
+  return days;
 }
 
 let saveTimer = null;
 function scheduleSave() {
   clearTimeout(saveTimer);
-  saveTimer = setTimeout(saveConfig, 500);
+  saveTimer = setTimeout(saveDays, 500);
 }
 
-function bindAutoSave(day, slot) {
-  const card = document.querySelector(`.day-card[data-day="${day}"]`);
-  if (!card) return;
-  const p = slot === 'in' ? 'ci' : 'co';
-  for (const role of [`${p}_time`, `${p}_lat`, `${p}_lng`, `${p}_radius`]) {
-    const el = card.querySelector(`[data-role=${role}]`);
-    if (el) el.addEventListener('input', scheduleSave);
+async function saveDays() {
+  const days = collectDays();
+  if (!days || !Object.keys(days).length) return false;
+  try {
+    await api('/api/config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ days }),
+    });
+    toast('Pengaturan hari disimpan');
+    return true;
+  } catch (e) {
+    toast('Gagal menyimpan: ' + e.message);
+    return false;
   }
-  const en = card.querySelector('[data-role=enabled]');
-  if (en) en.addEventListener('change', scheduleSave);
 }
 
-async function testLogin() {
+async function saveGeneral() {
+  const btn = document.getElementById('btn-save');
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
-  if (!email || !password) {
-    toast('Isi email & password dulu');
+  const catchup = parseInt(document.getElementById('catchup').value, 10);
+  if (!email) { toast('Email wajib diisi'); return; }
+  if (!Number.isFinite(catchup) || catchup < 1 || catchup > 1440) {
+    toast('Toleransi harus antara 1 dan 1440 menit');
     return;
   }
-  const r = await fetch('/api/test-login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password }),
-  });
-  const res = await r.json();
-  if (res.success) {
-    toast('Login sukses, token tersimpan');
-  } else {
-    toast('Login gagal: ' + res.error);
+  if (!password && !passwordSaved) { toast('Password wajib diisi'); return; }
+
+  const body = { email, catchup_minutes: catchup };
+  if (password) body.password = password;
+
+  btn.disabled = true;
+  try {
+    await api('/api/config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    await testLogin(email, password);
+  } catch (e) {
+    toast('Gagal menyimpan: ' + e.message);
+  } finally {
+    btn.disabled = false;
+    loadStatus();
   }
-  loadStatus();
 }
 
+async function testLogin(email, password) {
+  try {
+    const res = await api('/api/test-login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+    if (res.success) {
+      passwordSaved = true;
+      document.getElementById('password').value = '';
+      updatePasswordHint();
+      toast('Tersimpan. Login berhasil, token diperbarui.');
+    } else {
+      toast('Tersimpan, tapi login gagal: ' + res.error);
+    }
+  } catch (e) {
+    toast('Tersimpan, tapi uji login gagal: ' + e.message);
+  }
+}
+
+function updatePasswordHint() {
+  const pw = document.getElementById('password');
+  document.getElementById('pwhint').textContent = passwordSaved
+    ? 'Password tersimpan di server. Biarkan kosong kalau tidak ingin menggantinya.'
+    : 'Belum ada password tersimpan.';
+  pw.placeholder = passwordSaved ? '•••••••• (tersimpan)' : 'password';
+}
+
+/* ------------------------------------------------------------------ foto */
+
 async function loadImages() {
-  const r = await fetch('/api/images');
-  const res = await r.json();
+  let res;
+  try { res = await api('/api/images'); } catch (e) { return; }
   document.querySelectorAll('.day-card').forEach(card => {
-    const d = parseInt(card.dataset.day);
+    const d = parseInt(card.dataset.day, 10);
     const img = res.images.find(i => i.day === d);
     if (!img) return;
     for (const slot of ['in', 'out']) {
-      const p = slot === 'in' ? 'ci' : 'co';
+      const p = prefix(slot);
+      const info = img[slot] || { exists: false };
+      const prev = card.querySelector(`[data-role=${p}_prev]`);
       const imgEl = card.querySelector(`[data-role=${p}_img]`);
-      const delEl = card.querySelector(`[data-role=${p}_del]`);
       const label = card.querySelector(`[data-role=${p}_upload_label]`);
       const nophoto = card.querySelector(`[data-role=${p}_nophoto]`);
-      if (img[slot].exists) {
-        imgEl.src = img[slot].url + '?t=' + Date.now();
-        imgEl.style.display = 'block';
-        delEl.style.display = 'block';
-        label.textContent = 'Ganti Foto';
-        nophoto.textContent = '';
+      const title = slot === 'in' ? 'Clock In' : 'Clock Out';
+      if (info.exists) {
+        imgEl.src = info.url + '?t=' + Date.now();
+        prev.style.display = 'block';
+        label.textContent = 'Ganti Foto ' + title;
+        nophoto.textContent = info.filename || '';
+        nophoto.classList.remove('bad');
       } else {
-        imgEl.style.display = 'none';
-        delEl.style.display = 'none';
-        label.textContent = 'Unggah Foto ' + (slot === 'in' ? 'Clock In' : 'Clock Out');
-        nophoto.textContent = 'Belum ada foto';
+        imgEl.removeAttribute('src');
+        prev.style.display = 'none';
+        label.textContent = 'Unggah Foto ' + title;
+        nophoto.textContent = 'Wajib: tanpa foto, absen tidak dikirim';
+        nophoto.classList.add('bad');
       }
     }
   });
@@ -474,52 +533,133 @@ async function uploadImage(day, slot, input) {
   fd.append('day', day);
   fd.append('slot', slot);
   fd.append('file', file);
-  const r = await fetch('/api/upload', { method: 'POST', body: fd });
-  const res = await r.json();
-  toast(res.status === 'ok' ? `Foto ${DAY_NAMES[day]} (${slot === 'in' ? 'clock in' : 'clock out'}) diunggah` : 'Gagal: ' + JSON.stringify(res));
-  loadImages();
+  try {
+    await api('/api/upload', { method: 'POST', body: fd });
+    toast(`Foto ${DAY_NAMES[day]} (${slotLabel(slot)}) diunggah`);
+  } catch (e) {
+    toast('Gagal unggah: ' + e.message);
+  } finally {
+    // Reset supaya memilih file yang sama lagi tetap memicu onchange.
+    input.value = '';
+    loadImages();
+  }
 }
 
 async function deleteImage(day, slot) {
-  const r = await fetch(`/api/upload/${day}/${slot}`, { method: 'DELETE' });
-  const res = await r.json();
-  toast(res.status === 'ok' ? `Foto ${DAY_NAMES[day]} (${slot === 'in' ? 'clock in' : 'clock out'}) dihapus` : 'Gagal');
-  loadImages();
+  if (!confirm(`Hapus foto ${DAY_NAMES[day]} (${slotLabel(slot)})?`)) return;
+  try {
+    await api(`/api/upload/${day}/${slot}`, { method: 'DELETE' });
+    toast(`Foto ${DAY_NAMES[day]} (${slotLabel(slot)}) dihapus`);
+  } catch (e) {
+    toast('Gagal menghapus: ' + e.message);
+  } finally {
+    loadImages();
+  }
 }
 
+/* ------------------------------------------------------------ status/log */
+
+let logSignature = '';
 async function loadLogs() {
-  const r = await fetch('/api/logs');
-  const res = await r.json();
+  let res;
+  try { res = await api('/api/logs'); } catch (e) { return; }
+  const logs = res.logs || [];
+  const last = logs[logs.length - 1];
+  const sig = logs.length + '|' + (last ? last.action + last.message + last.count : '');
+  if (sig === logSignature) return; // hindari re-render yang mereset scroll
+  logSignature = sig;
+
   const box = document.getElementById('logbox');
-  if (!res.logs.length) {
+  if (!logs.length) {
     box.innerHTML = '<div class="log-row"><span class="m">Belum ada log.</span></div>';
     return;
   }
-  box.innerHTML = res.logs.slice().reverse().map(l => `
+  box.innerHTML = logs.slice().reverse().map(l => `
     <div class="log-row ${l.success ? 'ok' : 'err'}">
-      <span class="t">${l.time}</span>
+      <span class="t">${esc(l.time)}</span>
       <span class="a">${esc(l.action)}</span>
-      <span class="m">${esc(l.message)}</span>
-    </div>
-  `).join('');
+      <span class="m">${esc(l.message)}${l.count > 1 ? ` (terjadi ${l.count}x)` : ''}</span>
+    </div>`).join('');
+}
+
+function slotRow(label, s, dayEnabled) {
+  let cls = 'idle';
+  let text = 'belum waktunya';
+  if (!dayEnabled) {
+    text = 'hari ini tidak aktif';
+  } else if (s.done) {
+    cls = 'ok';
+    text = 'selesai' + (s.at ? ' pukul ' + s.at : '');
+  } else if (s.attempts > 0) {
+    cls = 'err';
+    text = `gagal ${s.attempts}x`;
+  } else if (s.pending) {
+    cls = 'warn';
+    text = 'menunggu dikirim';
+  }
+  return `
+    <div class="today-row">
+      <span class="today-label">${label}</span>
+      <span class="today-time">${esc(s.time || '-')}</span>
+      <span class="badge ${cls}">${esc(text)}</span>
+      ${s.message ? `<span class="today-msg">${esc(s.message)}</span>` : ''}
+    </div>`;
 }
 
 async function loadStatus() {
-  const r = await fetch('/api/status');
-  const s = await r.json();
+  let s;
+  try {
+    s = await api('/api/status');
+  } catch (e) {
+    document.getElementById('statusline').innerHTML =
+      '<span class="badge err">server tidak merespons</span> ' + esc(e.message);
+    return;
+  }
+
+  let loginBadge = '<span class="badge err">belum login</span>';
+  if (s.login_error) {
+    loginBadge = `<span class="badge err">gagal: ${esc(s.login_error)}</span>`;
+  } else if (s.token_set) {
+    loginBadge = s.token_valid
+      ? '<span class="badge ok">terhubung</span>'
+      : (s.token_checked_at
+          ? '<span class="badge err">token tidak valid</span>'
+          : '<span class="badge warn">memeriksa token...</span>');
+  }
+
   document.getElementById('statusline').innerHTML = `
-    Server: <b>${s.server_time}</b> (${s.weekday_name}) &nbsp;
-    Login: <span class="badge ${s.login_error ? 'err' : (s.token_set ? (s.token_valid ? 'ok' : 'err') : 'err')}">${s.login_error ? ('gagal: ' + esc(s.login_error)) : (s.token_set ? (s.token_valid ? 'terhubung' : 'gagal') : 'belum')}</span>
+    Server: <b>${esc(s.server_time)}</b> (${esc(s.weekday_name)}) &nbsp; Login: ${loginBadge}
     ${s.email ? `<br>Akun: <b>${esc(s.email)}</b>` : ''}
-  `;
+    <br>Toleransi telat: <b>${esc(s.catchup_minutes)} menit</b>`;
+
+  document.getElementById('todaybox').innerHTML =
+    slotRow('Clock In', s.clock_in || {}, s.day_enabled) +
+    slotRow('Clock Out', s.clock_out || {}, s.day_enabled);
 }
 
-setInterval(loadLogs, 5000);
-setInterval(loadStatus, 30000);
+/* -------------------------------------------------------------- bootstrap */
 
-loadConfig();
-loadLogs();
-loadStatus();
+async function init() {
+  document.getElementById('password').addEventListener('keydown', e => {
+    if (e.key === 'Enter') saveGeneral();
+  });
+  try {
+    const c = await api('/api/config');
+    document.getElementById('email').value = c.email || '';
+    document.getElementById('catchup').value = c.catchup_minutes || 240;
+    passwordSaved = !!c.password_set;
+    updatePasswordHint();
+    buildDayCards(c.days || {});
+  } catch (e) {
+    toast('Gagal memuat konfigurasi: ' + e.message);
+  }
+  loadLogs();
+  loadStatus();
+  setInterval(loadLogs, 5000);
+  setInterval(loadStatus, 10000);
+}
+
+init();
 </script>
 </body>
 </html>
